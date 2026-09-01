@@ -1,0 +1,5 @@
+# Test dependencies. aiohttp is the ISAPI client's only runtime dependency;
+# Home Assistant already ships it, so it stays out of the manifest.
+aiohttp
+pytest
+ruff
