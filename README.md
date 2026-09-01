@@ -88,7 +88,7 @@ Copy `custom_components/hikvision_intercom` into your installation's
 | `binary_sensor` | Ringing, Call session (diagnostic), Push degraded (diagnostic) |
 | `lock` | Door (momentary unlock) |
 | `switch` | Output relay, Always unlocked |
-| `button` | Answer, Reject, Hang up, Reboot |
+| `button` | Reject, Reboot (Answer and Hang up ship disabled, see below) |
 | `camera` | ISAPI snapshot + RTSP stream |
 
 > **About the `onCall` state:** it does **not** mean anyone answered. In a
@@ -101,6 +101,20 @@ Copy `custom_components/hikvision_intercom` into your installation's
 >
 > **The window to answer is ~31 seconds** from the ring. Worth keeping in mind
 > when building notifications: after that the device gives up on its own.
+
+### Answer and Hang up are disabled by default
+
+The `answer` and `hangup` buttons are created disabled. Answering from Home
+Assistant today would pick the call up on the door station — the visitor sees
+that someone answered — while no audio path exists on this side. They talk and
+nobody hears them, which is worse than not answering at all. `hangup` only
+exists to undo that.
+
+Enable them in the entity settings once two-way audio is configured.
+
+Note that the device answers `200 OK` to all three call signals (`answer`,
+`reject`, `hangUp`) even when idle, so a successful response is not evidence
+that the command did anything.
 
 ### Missed calls
 

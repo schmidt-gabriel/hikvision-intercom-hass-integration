@@ -27,14 +27,31 @@ class IntercomButtonDescription(ButtonEntityDescription):
 
 
 BUTTONS: tuple[IntercomButtonDescription, ...] = (
+    # `answer` and `hangup` are disabled by default until two-way audio is
+    # wired up. Answering from Home Assistant today would pick the call up on
+    # the door station -- the visitor sees someone answered -- while no audio
+    # path exists on this side. They talk and nobody hears them, which is worse
+    # than not answering at all. `hangup` only exists to undo that, so it is
+    # equally premature.
+    #
+    # The device accepts all three cmdTypes with 200 OK even while idle, so a
+    # successful response is not evidence that the command does anything.
+    #
+    # Both remain available for anyone who wants to enable them explicitly.
     IntercomButtonDescription(
-        key="answer", translation_key="answer", press_fn=lambda c: c.answer_call()
+        key="answer",
+        translation_key="answer",
+        entity_registry_enabled_default=False,
+        press_fn=lambda c: c.answer_call(),
     ),
     IntercomButtonDescription(
         key="reject", translation_key="reject", press_fn=lambda c: c.reject_call()
     ),
     IntercomButtonDescription(
-        key="hangup", translation_key="hangup", press_fn=lambda c: c.hangup_call()
+        key="hangup",
+        translation_key="hangup",
+        entity_registry_enabled_default=False,
+        press_fn=lambda c: c.hangup_call(),
     ),
     IntercomButtonDescription(
         key="reboot",
