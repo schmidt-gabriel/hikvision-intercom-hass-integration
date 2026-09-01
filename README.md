@@ -175,6 +175,17 @@ only — the RTSP backchannel produces periodic static.
 - Indoor stations (DS-KH*) are not supported yet; the architecture is already
   multi-device to accommodate them.
 
+## Brand images
+
+`custom_components/hikvision_intercom/brand/` holds the icon Home Assistant
+shows for this integration. Since Home Assistant 2026.3.0, custom integrations
+serve their own brand images from that folder through the brands proxy API, so
+no submission to the `home-assistant/brands` repository is needed (and that
+repository no longer accepts custom integration icons).
+
+The folder is read at startup, so a newly added or replaced icon only shows
+after a restart.
+
 ## Technical documentation
 
 [`docs/protocol.md`](docs/protocol.md) records the real behaviour of ISAPI on
