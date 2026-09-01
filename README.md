@@ -150,21 +150,43 @@ HIK_PASSWORD=your-password python -m isapi.client 10.0.20.26 --watch 60
 The password is read from the environment on purpose — passing it as an
 argument would leave it in shell history and in the process list.
 
-## Two-way audio
+## Two-way audio (not implemented)
 
-The go2rtc bundled with Home Assistant already speaks the `isapi://`
-backchannel, so no companion server is needed:
+Two-way audio is **not supported yet**, and the reason is worth recording
+because it is not obvious.
 
-```yaml
-streams:
-  intercom:
-    - rtsp://user:password@10.0.20.26:554/Streaming/Channels/101
-    - isapi://user:password@10.0.20.26:80/
+The device side is ready: `/ISAPI/System/TwoWayAudio/channels` exposes a
+G.711 µ-law channel, and go2rtc speaks that backchannel through its `isapi://`
+source. The blocker is on the Home Assistant side. The bundled go2rtc writes
+its own configuration from a hardcoded template on every start:
+
+```
+# This file is managed by Home Assistant
+# Do not edit it manually
 ```
 
-The device's audio channel **ships disabled**; the integration enables it. The
-community recommendation is to leave two-way disabled on RTSP and use ISAPI
-only — the RTSP backchannel produces periodic static.
+It ignores any user `go2rtc.yaml`, so there is no way to give a stream the
+second `isapi://` source that a backchannel requires.
+
+Two viable routes remain, neither implemented here:
+
+1. **Self-hosted go2rtc.** Run the go2rtc add-on, define the stream with both
+   sources, and point Home Assistant at it with `go2rtc: url: ...`. This works
+   because the go2rtc integration leaves an existing stream untouched when it
+   already lists the camera's `stream_source` as a producer, so the extra
+   backchannel producer survives. The cost is that the self-hosted instance
+   then serves every camera, not just the intercom.
+
+2. **One-way audio over ISAPI.** `PUT /ISAPI/System/TwoWayAudio/channels/1/audioData`
+   accepts G.711 µ-law, which is enough to play TTS or a recorded message
+   through the door station speaker. Not a conversation, but it needs no extra
+   infrastructure and stays inside the integration.
+
+Note that the device's audio channel ships with `enabled=false`, so either
+route has to enable it first.
+
+Community guidance, for whoever picks this up: leave two-way disabled on RTSP
+and use ISAPI only — the RTSP backchannel produces periodic static.
 
 ## Limitations
 
