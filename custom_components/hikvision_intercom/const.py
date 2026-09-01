@@ -9,7 +9,6 @@ CONF_USERNAME = "username"
 CONF_PASSWORD = "password"
 
 DEFAULT_PORT = 80
-DEFAULT_RTSP_PORT = 554
 
 # Options
 CONF_POLL_INTERVAL = "poll_interval"

@@ -273,3 +273,32 @@ class TestOperationTime:
 
     def test_survives_garbage_shape(self):
         assert OperationTime.from_xml(b"<Other><x>1</x></Other>") == OperationTime()
+
+
+class TestRtspUrl:
+    """Covers IsapiClient.rtsp_url.
+
+    Regression test for a real crash: rtsp_url referenced DEFAULT_RTSP_PORT
+    from isapi/const.py while the constant lived in the component's const.py.
+    Nothing in the suite called rtsp_url, so it only surfaced when Home
+    Assistant set up the camera platform and the entity failed to add.
+    """
+
+    def _client(self):
+        from isapi.client import IsapiClient
+
+        return IsapiClient("10.0.0.9", "admin", "secret")
+
+    def test_builds_url_with_credentials(self):
+        url = self._client().rtsp_url(101)
+        assert url == "rtsp://admin:secret@10.0.0.9:554/Streaming/Channels/101"
+
+    def test_can_omit_credentials(self):
+        url = self._client().rtsp_url(101, with_credentials=False)
+        assert url == "rtsp://10.0.0.9:554/Streaming/Channels/101"
+        assert "secret" not in url
+
+    def test_defaults_to_the_main_stream(self):
+        from isapi.const import MAIN_STREAM_CHANNEL
+
+        assert str(MAIN_STREAM_CHANNEL) in self._client().rtsp_url()

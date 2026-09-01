@@ -49,6 +49,9 @@ SNAPSHOT = "/ISAPI/Streaming/channels/{channel}/picture"
 TWO_WAY_AUDIO_CHANNELS = "/ISAPI/System/TwoWayAudio/channels"
 TWO_WAY_AUDIO_CHANNEL = "/ISAPI/System/TwoWayAudio/channels/{channel}"
 
+# The client must stay Home Assistant free and self-contained, so the RTSP port
+# lives here rather than in the component's const.py.
+DEFAULT_RTSP_PORT = 554
 RTSP_PATH = "/Streaming/Channels/{channel}"
 
 MAIN_STREAM_CHANNEL = 101

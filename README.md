@@ -1,5 +1,7 @@
 # Hikvision Video Intercom — Home Assistant integration
 
+<img src="custom_components/hikvision_intercom/brand/icon.png" alt="Hikvision Video Intercom" width="128" align="right">
+
 [![Validate](https://github.com/schmidt-gabriel/hikvision-intercom-hass-integration/actions/workflows/validate.yml/badge.svg)](https://github.com/schmidt-gabriel/hikvision-intercom-hass-integration/actions/workflows/validate.yml)
 
 A **local** integration for Hikvision door stations, speaking **pure ISAPI over
