@@ -1,0 +1,97 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Hikvision Video Intercom",
+        "description": "Informe os dados de acesso do porteiro. O ISAPI precisa estar habilitado no aparelho.",
+        "data": {
+          "host": "Endereço IP",
+          "username": "Usuário",
+          "password": "Senha",
+          "port": "Porta HTTP"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Autenticar novamente",
+        "description": "A senha do intercom em {host} foi recusada. Informe a senha atual.",
+        "data": {
+          "password": "Senha"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Não foi possível conectar ao aparelho.",
+      "invalid_auth": "Usuário ou senha inválidos.",
+      "unknown": "Erro inesperado."
+    },
+    "abort": {
+      "already_configured": "Este intercom já está configurado.",
+      "reauth_successful": "Autenticação atualizada."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Opções",
+        "data": {
+          "poll_interval": "Intervalo de verificação (segundos)",
+          "answered_ring_threshold": "Limiar de chamada atendida (segundos)"
+        },
+        "data_description": {
+          "poll_interval": "Usado quando a detecção por push não está disponível. Valores menores detectam o toque mais rápido.",
+          "answered_ring_threshold": "Se o toque durar menos que isto, consideramos que alguém atendeu. O padrão (29,2s) vem de medições neste modelo. Ajuste se as suas chamadas perdidas tiverem duração diferente — o log em modo debug mostra a duração real de cada toque."
+        }
+      }
+    }
+  },
+  "entity": {
+    "event": {
+      "doorbell": {
+        "name": "Campainha"
+      }
+    },
+    "binary_sensor": {
+      "ringing": {
+        "name": "Tocando"
+      },
+      "push_degraded": {
+        "name": "Push degradado"
+      },
+      "call_session": {
+        "name": "Sessão de chamada"
+      }
+    },
+    "button": {
+      "answer": {
+        "name": "Atender"
+      },
+      "reject": {
+        "name": "Rejeitar"
+      },
+      "hangup": {
+        "name": "Desligar"
+      },
+      "reboot": {
+        "name": "Reiniciar"
+      }
+    },
+    "lock": {
+      "door": {
+        "name": "Porta"
+      }
+    },
+    "switch": {
+      "relay_1": {
+        "name": "Relé 1"
+      },
+      "always_open": {
+        "name": "Destravado permanente"
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Câmera"
+      }
+    }
+  }
+}

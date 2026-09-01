@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OperationTime version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<messageTime>30</messageTime>
+<talkTime>90</talkTime>
+<maxRingTime>65</maxRingTime>
+</OperationTime>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VideoIntercomCap version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<isSupportDeviceId>true</isSupportDeviceId>
+<isSupportOperationTime>true</isSupportOperationTime>
+<isSupportRemoteOpenDoor>true</isSupportRemoteOpenDoor>
+<isSupportKeyCfg>true</isSupportKeyCfg>
+<isSupportAlarmUploadCfg>true</isSupportAlarmUploadCfg>
+<isSupportSendCardCfg>true</isSupportSendCardCfg>
+<isSupportDeviceLanguageCfg>true</isSupportDeviceLanguageCfg>
+<isSupportAlarmControlByPhone>false</isSupportAlarmControlByPhone>
+<isSupportWorkStatus>true</isSupportWorkStatus>
+<isSupportRingBackTone>true</isSupportRingBackTone>
+<isSupportPhoneCfg>true</isSupportPhoneCfg>
+<isSupportElevatorControlCfg>true</isSupportElevatorControlCfg>
+<isSupportSecurityMode>true</isSupportSecurityMode>
+<isSupportDeviceCommunication>true</isSupportDeviceCommunication>
+<isSupportSubModuleBacklight>true</isSupportSubModuleBacklight>
+</VideoIntercomCap>

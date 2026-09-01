@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<EventTriggerList version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<EventTrigger>
+<id>vmd-1</id>
+<eventType>VMD</eventType>
+<EventTriggerNotificationList>
+<EventTriggerNotification>
+<id>center</id>
+<notificationMethod>center</notificationMethod>
+<notificationRecurrence>beginning</notificationRecurrence>
+</EventTriggerNotification>
+</EventTriggerNotificationList>
+</EventTrigger>
+</EventTriggerList>

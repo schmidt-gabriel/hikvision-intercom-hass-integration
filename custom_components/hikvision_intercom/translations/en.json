@@ -1,0 +1,97 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Hikvision Video Intercom",
+        "description": "Enter the door station credentials. ISAPI must be enabled on the device.",
+        "data": {
+          "host": "IP address",
+          "username": "Username",
+          "password": "Password",
+          "port": "HTTP port"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Re-authenticate",
+        "description": "The password for the intercom at {host} was rejected. Enter the current password.",
+        "data": {
+          "password": "Password"
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Failed to connect to the device.",
+      "invalid_auth": "Invalid username or password.",
+      "unknown": "Unexpected error."
+    },
+    "abort": {
+      "already_configured": "This intercom is already configured.",
+      "reauth_successful": "Authentication updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Options",
+        "data": {
+          "poll_interval": "Poll interval (seconds)",
+          "answered_ring_threshold": "Answered-call threshold (seconds)"
+        },
+        "data_description": {
+          "poll_interval": "Used when push detection is unavailable. Lower values detect the ring faster.",
+          "answered_ring_threshold": "If the ring lasts less than this, we treat the call as answered. The default (29.2s) comes from measurements on this model. Adjust it if your missed calls last a different time — debug logs show the actual ring duration of each call."
+        }
+      }
+    }
+  },
+  "entity": {
+    "event": {
+      "doorbell": {
+        "name": "Doorbell"
+      }
+    },
+    "binary_sensor": {
+      "ringing": {
+        "name": "Ringing"
+      },
+      "push_degraded": {
+        "name": "Push degraded"
+      },
+      "call_session": {
+        "name": "Call session"
+      }
+    },
+    "button": {
+      "answer": {
+        "name": "Answer"
+      },
+      "reject": {
+        "name": "Reject"
+      },
+      "hangup": {
+        "name": "Hang up"
+      },
+      "reboot": {
+        "name": "Reboot"
+      }
+    },
+    "lock": {
+      "door": {
+        "name": "Door"
+      }
+    },
+    "switch": {
+      "relay_1": {
+        "name": "Relay 1"
+      },
+      "always_open": {
+        "name": "Always unlocked"
+      }
+    },
+    "camera": {
+      "camera": {
+        "name": "Camera"
+      }
+    }
+  }
+}

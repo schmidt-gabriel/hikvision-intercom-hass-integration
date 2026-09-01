@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<HttpHostNotificationList version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<HttpHostNotification version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<id>1</id>
+<url></url>
+<protocolType>HTTP</protocolType>
+<parameterFormatType>XML</parameterFormatType>
+<addressingFormatType>ipaddress</addressingFormatType>
+<ipAddress>0.0.0.0</ipAddress>
+<portNo>0</portNo>
+<httpAuthenticationMethod>none</httpAuthenticationMethod>
+</HttpHostNotification>
+</HttpHostNotificationList>

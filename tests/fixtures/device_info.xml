@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DeviceInfo version="2.0" xmlns="http://www.isapi.org/ver20/XMLSchema">
+<deviceName>INTERFONE</deviceName>
+<deviceID>00000000-0000-4000-8000-000000000001</deviceID>
+<deviceDescription>	Vis</deviceDescription>
+<deviceLocation>STD-CGI</deviceLocation>
+<systemContact>STD-CGI</systemContact>
+<model>DS-KB8113-IME1(B)</model>
+<serialNumber>DS-KB8113-IME1(B)0120240101EXAMPLE0000</serialNumber>
+<macAddress>a4:d5:c2:00:00:01</macAddress>
+<firmwareVersion>V2.2.60</firmwareVersion>
+<firmwareReleasedDate>build 231204</firmwareReleasedDate>
+<bootVersion>33685564</bootVersion>
+<bootReleasedDate>1510404</bootReleasedDate>
+<hardwareVersion>0x0</hardwareVersion>
+<encoderVersion>V2.7</encoderVersion>
+<encoderReleasedDate>build 230606</encoderReleasedDate>
+<deviceType>VIS</deviceType>
+<subDeviceType>villaDoorStation</subDeviceType>
+<telecontrolID>88</telecontrolID>
+<supportBeep>true</supportBeep>
+<supportVideoLoss>true</supportVideoLoss>
+<alarmOutNum>0</alarmOutNum>
+<alarmInNum>1</alarmInNum>
+<RS485Num>0</RS485Num>
+<customizedInfo></customizedInfo>
+</DeviceInfo>
