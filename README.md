@@ -28,6 +28,56 @@ in those integrations; it is the device.**
 
 This integration solves it by not betting on a single channel.
 
+## Tested hardware
+
+**Only one device has ever been tested with this integration.** Everything
+below was verified against real hardware; anything not listed is unverified.
+
+| | |
+|---|---|
+| Door station | **DS-KB8113-IME1(B)**, firmware V2.2.60 (build 231204) |
+| Home Assistant | **2026.8.1** |
+
+Verified by exercising the real device:
+
+- Doorbell detection, with actual button presses
+- Answered vs missed classification, across four real calls (two unanswered,
+  one answered on the indoor station, one answered in the phone app)
+- Door unlock, confirmed by the lock physically opening
+- Camera snapshot, returning a valid JPEG
+- Capability probing, digest authentication, and reconnection
+
+Present in the code but **not** verified on hardware:
+
+- The RTSP live stream (the snapshot path is verified, live view is not)
+- The output relay switch
+- The `answer`, `reject` and `hangup` call signals during an active call. The
+  device returns `200 OK` to all three even while idle, so a successful
+  response proves nothing. This is part of why `answer` and `hangup` ship
+  disabled.
+- The reboot button
+
+### Other models
+
+**No other model is covered.** Other Hikvision door stations (DS-KV, DS-KD, and
+other DS-KB variants) may work, since the integration probes capabilities at
+startup instead of assuming them, but none has been tried.
+
+Indoor stations (DS-KH*) are **not supported**. A DS-KH6350-WTE1 sits on the
+same installation and was never probed, so nothing is known about it here.
+
+Firmware matters at least as much as the model: the findings in
+[`docs/protocol.md`](docs/protocol.md), including the broken `alertStream` and
+the digest nonce that cannot be reused, are specific to V2.2.60 and may differ
+on other firmware.
+
+If you try another model, the probe output is the useful thing to report:
+
+```bash
+cd custom_components/hikvision_intercom
+HIK_PASSWORD=your-password python -m isapi.client <device-ip>
+```
+
 ## Layered doorbell detection
 
 At startup the device is **probed** — we test behaviour rather than trusting
@@ -195,7 +245,8 @@ and use ISAPI only — the RTSP backchannel produces periodic static.
 - There is only **one** HTTP notification slot. If an NVR or HikConnect already
   uses it, the integration warns instead of silently overwriting.
 - Indoor stations (DS-KH*) are not supported yet; the architecture is already
-  multi-device to accommodate them.
+  multi-device to accommodate them. See [Tested hardware](#tested-hardware) for
+  what has and has not been verified.
 
 ## Brand images
 
