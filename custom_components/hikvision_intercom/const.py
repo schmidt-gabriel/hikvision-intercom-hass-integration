@@ -19,6 +19,13 @@ CONF_ANSWERED_RING_THRESHOLD = "answered_ring_threshold"
 DEFAULT_POLL_INTERVAL = 1.0  # seconds, while polling
 HEALTHCHECK_INTERVAL = 30.0  # seconds, while in push mode
 
+# Consecutive failed reads absorbed before entities go unavailable; while
+# absorbing, entities keep the last known state. With the client's 10s timeout,
+# a dead device is reported after ~20s instead of after one second.
+FAILURE_TOLERANCE = 2
+# Past the tolerance the poll interval doubles per failure, up to this cap.
+MAX_BACKOFF_INTERVAL = 60.0  # seconds
+
 # How long without a push event before the watchdog considers the channel degraded.
 PUSH_WATCHDOG_TIMEOUT = 300.0  # 5 minutes
 
