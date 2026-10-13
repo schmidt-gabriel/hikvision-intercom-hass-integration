@@ -27,12 +27,15 @@ from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant, callback
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
+from .backoff import FailureBackoff
 from .const import (
     CONF_ANSWERED_RING_THRESHOLD,
     DEFAULT_ANSWERED_RING_THRESHOLD,
     DEFAULT_POLL_INTERVAL,
     DOMAIN,
+    FAILURE_TOLERANCE,
     HEALTHCHECK_INTERVAL,
+    MAX_BACKOFF_INTERVAL,
     PUSH_WATCHDOG_TIMEOUT,
 )
 from .isapi.client import AuthError, CannotConnect, IsapiClient, IsapiError
@@ -92,6 +95,7 @@ class HikvisionIntercomCoordinator(DataUpdateCoordinator[IntercomState]):
         self._ring_callbacks: list = []
         self._call_result_callbacks: list = []
         self._ring_started_at: float | None = None
+        self._backoff = FailureBackoff(FAILURE_TOLERANCE, MAX_BACKOFF_INTERVAL)
 
         super().__init__(
             hass,
@@ -102,9 +106,12 @@ class HikvisionIntercomCoordinator(DataUpdateCoordinator[IntercomState]):
         self.data = IntercomState(ring_channel="polling")
 
     def _interval_for_mode(self) -> timedelta:
-        """Confirmed push allows a long interval; without push, tight polling."""
+        """Confirmed push allows a long interval; without push, tight polling.
+
+        Either one is stretched while the device keeps failing (see backoff.py).
+        """
         seconds = HEALTHCHECK_INTERVAL if self._push_active else DEFAULT_POLL_INTERVAL
-        return timedelta(seconds=seconds)
+        return timedelta(seconds=self._backoff.interval(seconds))
 
     # ------------------------------------------------------------------
     # Update cycle
@@ -118,11 +125,11 @@ class HikvisionIntercomCoordinator(DataUpdateCoordinator[IntercomState]):
         """
         try:
             status = await self.client.get_call_status()
-        except AuthError as err:
-            # Credentials revoked: ask for reauth instead of retrying forever.
-            raise UpdateFailed(f"Authentication rejected: {err}") from err
-        except (CannotConnect, IsapiError) as err:
-            raise UpdateFailed(f"Failed to read intercom state: {err}") from err
+        except (AuthError, CannotConnect, IsapiError) as err:
+            return self._handle_read_failure(err)
+
+        if self._backoff.record_success():
+            self.update_interval = self._interval_for_mode()
 
         previous = self.data or IntercomState()
         self._check_push_watchdog(status, previous)
@@ -139,6 +146,32 @@ class HikvisionIntercomCoordinator(DataUpdateCoordinator[IntercomState]):
             self._fire_ring(source="polling")
 
         return self._track_call_outcome(state, previous, status)
+
+    def _handle_read_failure(self, err: IsapiError) -> IntercomState:
+        """Absorb a short run of failed reads; past that, report and back off.
+
+        AuthError is tolerated like any other failure: this firmware has
+        rejected a single handshake and accepted the next one (2026-10-12).
+        """
+        if isinstance(err, AuthError):
+            reason = f"Authentication rejected: {err}"
+        else:
+            reason = f"Failed to read intercom state: {err}"
+
+        tolerated = self._backoff.record_failure()
+        self.update_interval = self._interval_for_mode()
+
+        if tolerated:
+            _LOGGER.debug(
+                "%s (failure %d of %d tolerated, keeping last state)",
+                reason,
+                self._backoff.failures,
+                self._backoff.tolerance,
+            )
+            return self.data
+
+        _LOGGER.debug("Next read in %s", self.update_interval)
+        raise UpdateFailed(reason) from err
 
     def _track_call_outcome(
         self, state: IntercomState, previous: IntercomState, status: str
